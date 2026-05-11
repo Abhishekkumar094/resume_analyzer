@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>
+    AI Resume Analyzer
+  </title>
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Inter',sans-serif;
+    }
+
+    body{
+      background:#020617;
+      color:white;
+      overflow-x:hidden;
+    }
+
+    .container{
+      width:90%;
+      max-width:1300px;
+      margin:auto;
+    }
+
+    nav{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:25px 0;
+    }
+
+    .logo{
+      font-size:28px;
+      font-weight:800;
+      color:#3b82f6;
+    }
+
+    .nav-links{
+      display:flex;
+      gap:25px;
+    }
+
+    .nav-links a{
+      color:#cbd5e1;
+      text-decoration:none;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:50px;
+      align-items:center;
+      padding:70px 0;
+    }
+
+    .hero h1{
+      font-size:60px;
+      line-height:1.1;
+      margin-bottom:25px;
+    }
+
+    .hero h1 span{
+      color:#3b82f6;
+    }
+
+    .hero p{
+      color:#94a3b8;
+      line-height:1.8;
+      margin-bottom:30px;
+      font-size:18px;
+    }
+
+    .primary-btn{
+      background:#2563eb;
+      color:white;
+      border:none;
+      padding:15px 28px;
+      border-radius:15px;
+      cursor:pointer;
+      font-size:16px;
+      font-weight:600;
+      transition:0.3s;
+    }
+
+    .primary-btn:hover{
+      opacity:0.9;
+    }
+
+    .primary-btn:disabled{
+      opacity:0.5;
+      cursor:not-allowed;
+    }
+
+    .upload-card{
+      background:#111827;
+      border:1px solid #1e293b;
+      border-radius:30px;
+      padding:35px;
+    }
+
+    .upload-box{
+      border:2px dashed #334155;
+      border-radius:25px;
+      padding:50px 30px;
+      text-align:center;
+    }
+
+    .upload-icon{
+      font-size:70px;
+      margin-bottom:20px;
+    }
+
+    .upload-box h2{
+      margin-bottom:15px;
+    }
+
+    .upload-box p{
+      color:#94a3b8;
+      margin-bottom:20px;
+    }
+
+    input[type=file]{
+      margin:20px 0;
+      color:white;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:25px;
+      margin:60px 0;
+    }
+
+    .stat-card{
+      background:#111827;
+      border:1px solid #1e293b;
+      border-radius:25px;
+      padding:30px;
+      text-align:center;
+    }
+
+    .stat-card h3{
+      color:#94a3b8;
+      margin-bottom:15px;
+    }
+
+    .stat-value{
+      font-size:45px;
+      font-weight:800;
+      margin-bottom:10px;
+    }
+
+    .green{
+      color:#22c55e;
+    }
+
+    .blue{
+      color:#3b82f6;
+    }
+
+    .purple{
+      color:#a855f7;
+    }
+
+    .orange{
+      color:#f97316;
+    }
+
+    .section-title{
+      text-align:center;
+      margin-bottom:50px;
+    }
+
+    .section-title h2{
+      font-size:45px;
+      margin-bottom:15px;
+    }
+
+    .section-title p{
+      color:#94a3b8;
+    }
+
+    .features{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:25px;
+      margin-bottom:80px;
+    }
+
+    .feature-card{
+      background:#111827;
+      border:1px solid #1e293b;
+      border-radius:25px;
+      padding:35px;
+    }
+
+    .feature-icon{
+      font-size:45px;
+      margin-bottom:20px;
+    }
+
+    .feature-card h3{
+      margin-bottom:15px;
+    }
+
+    .feature-card p{
+      color:#94a3b8;
+      line-height:1.7;
+    }
+
+    .result-section{
+      background:#111827;
+      border:1px solid #1e293b;
+      border-radius:25px;
+      padding:35px;
+      margin-bottom:40px;
+    }
+
+    .result-section h2{
+      margin-bottom:25px;
+    }
+
+    .skills{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    .skill{
+      padding:10px 18px;
+      border-radius:50px;
+      background:#1e3a8a;
+      color:white;
+      font-size:14px;
+    }
+
+    .error-box{
+      background:#7f1d1d;
+      border:1px solid #ef4444;
+      color:white;
+      padding:15px;
+      border-radius:15px;
+      margin-bottom:30px;
+      display:none;
+    }
+
+    .success-box{
+      background:#14532d;
+      border:1px solid #22c55e;
+      color:white;
+      padding:15px;
+      border-radius:15px;
+      margin-bottom:30px;
+      display:none;
+    }
+
+    footer{
+      border-top:1px solid #1e293b;
+      padding:40px 0;
+      text-align:center;
+      color:#64748b;
+    }
+
+    @media(max-width:900px){
+
+      .hero,
+      .stats,
+      .features{
+        grid-template-columns:1fr;
+      }
+
+      .hero h1{
+        font-size:45px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- NAVBAR -->
+
+    <nav>
+
+      <div class="logo">
+        AI Resume Analyzer
+      </div>
+
+      <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Features</a>
+        <a href="#">Dashboard</a>
+      </div>
+
+    </nav>
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+      <div>
+
+        <h1>
+          Analyze Your Resume With
+          <span>AI & ATS</span>
+        </h1>
+
+        <p>
+          Upload your resume and get ATS score,
+          skills analysis, job match insights,
+          and missing skill recommendations.
+        </p>
+
+        <button class="primary-btn">
+          Smart Resume Analysis
+        </button>
+
+      </div>
+
+      <!-- Upload -->
+
+      <div class="upload-card">
+
+        <div class="upload-box">
+
+          <div class="upload-icon">
+            📄
+          </div>
+
+          <h2>
+            Upload Resume
+          </h2>
+
+          <p>
+            PDF & DOCX Supported
+          </p>
+
+          <input
+            type="file"
+            id="resumeFile"
+          >
+
+          <br>
+
+          <button
+            class="primary-btn"
+            onclick="uploadResume()"
+            id="uploadBtn"
+          >
+            Analyze Resume
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ALERTS -->
+
+    <div
+      class="error-box"
+      id="errorBox"
+    ></div>
+
+    <div
+      class="success-box"
+      id="successBox"
+    ></div>
+
+    <!-- STATS -->
+
+    <section class="stats">
+
+      <div class="stat-card">
+
+        <h3>ATS Score</h3>
+
+        <div
+          class="stat-value green"
+          id="atsScore"
+        >
+          0%
+        </div>
+
+        <p>Resume Optimization</p>
+
+      </div>
+
+      <div class="stat-card">
+
+        <h3>Job Match</h3>
+
+        <div
+          class="stat-value blue"
+          id="jobMatch"
+        >
+          0%
+        </div>
+
+        <p>Job Compatibility</p>
+
+      </div>
+
+      <div class="stat-card">
+
+        <h3>Skills Found</h3>
+
+        <div
+          class="stat-value purple"
+          id="skillsCount"
+        >
+          0
+        </div>
+
+        <p>Technical Skills</p>
+
+      </div>
+
+      <div class="stat-card">
+
+        <h3>Missing Skills</h3>
+
+        <div
+          class="stat-value orange"
+          id="missingCount"
+        >
+          0
+        </div>
+
+        <p>Need Improvement</p>
+
+      </div>
+
+    </section>
+
+    <!-- FEATURES -->
+
+    <div class="section-title">
+
+      <h2>
+        AI Features
+      </h2>
+
+      <p>
+        Advanced ATS & AI Resume Intelligence Platform
+      </p>
+
+    </div>
+
+    <section class="features">
+
+      <div class="feature-card">
+
+        <div class="feature-icon">📊</div>
+
+        <h3>ATS Scoring</h3>
+
+        <p>
+          Smart ATS score calculation based on resume quality.
+        </p>
+
+      </div>
+
+      <div class="feature-card">
+
+        <div class="feature-icon">🧠</div>
+
+        <h3>AI Suggestions</h3>
+
+        <p>
+          Intelligent recommendations for resume improvement.
+        </p>
+
+      </div>
+
+      <div class="feature-card">
+
+        <div class="feature-icon">🎯</div>
+
+        <h3>Job Matching</h3>
+
+        <p>
+          Match your resume with job descriptions instantly.
+        </p>
+
+      </div>
+
+    </section>
+
+    <!-- SKILLS -->
+
+    <section class="result-section">
+
+      <h2>
+        Detected Skills
+      </h2>
+
+      <div
+        class="skills"
+        id="skillsContainer"
+      ></div>
+
+    </section>
+
+    <!-- MISSING SKILLS -->
+
+    <section class="result-section">
+
+      <h2>
+        Missing Skills
+      </h2>
+
+      <div
+        class="skills"
+        id="missingSkillsContainer"
+      ></div>
+
+    </section>
+
+    <!-- FOOTER -->
+
+    <footer>
+      © 2026 AI Resume Analyzer
+    </footer>
+
+  </div>
+
+  <!-- JAVASCRIPT -->
+
+  <script>
+
+    async function uploadResume() {
+
+      const fileInput =
+        document.getElementById('resumeFile')
+
+      const file = fileInput.files[0]
+
+      const uploadBtn =
+        document.getElementById('uploadBtn')
+
+      const errorBox =
+        document.getElementById('errorBox')
+
+      const successBox =
+        document.getElementById('successBox')
+
+      errorBox.style.display = 'none'
+      successBox.style.display = 'none'
+
+      if (!file) {
+
+        showError(
+          'Please select a resume file'
+        )
+
+        return
+      }
+
+      // File extension validation
+
+      const fileName =
+        file.name.toLowerCase()
+
+      if (
+        !fileName.endsWith('.pdf') &&
+        !fileName.endsWith('.docx')
+      ) {
+
+        showError(
+          'Only PDF and DOCX files are allowed'
+        )
+
+        return
+      }
+
+      // File size validation
+
+      if (
+        file.size > 5 * 1024 * 1024
+      ) {
+
+        showError(
+          'File size must be under 5MB'
+        )
+
+        return
+      }
+
+      const formData = new FormData()
+
+      formData.append(
+        'resume',
+        file
+      )
+
+      try {
+
+        uploadBtn.innerText =
+          'Analyzing...'
+
+        uploadBtn.disabled = true
+
+        const response = await fetch(
+
+          'http://127.0.0.1:5000/api/resume/upload',
+
+          {
+            method: 'POST',
+            body: formData
+          }
+
+        )
+
+        const data =
+          await response.json()
+
+        console.log(data)
+
+        if (!response.ok) {
+
+          showError(
+            data.error ||
+            'Upload failed'
+          )
+
+          return
+        }
+
+        showSuccess(
+          'Resume analyzed successfully'
+        )
+
+        // Update stats
+
+        document.getElementById(
+          'atsScore'
+        ).innerText =
+          (data.ats_score ?? 0) + '%'
+
+        document.getElementById(
+          'jobMatch'
+        ).innerText =
+          (data.job_match ?? 0) + '%'
+
+        document.getElementById(
+          'skillsCount'
+        ).innerText =
+          data.skills?.length ?? 0
+
+        document.getElementById(
+          'missingCount'
+        ).innerText =
+          data.missing_skills?.length ?? 0
+
+        // Skills
+
+        const skillsContainer =
+          document.getElementById(
+            'skillsContainer'
+          )
+
+        skillsContainer.innerHTML = ''
+
+        const skills =
+          data.skills || []
+
+        skills.forEach(skill => {
+
+          const div =
+            document.createElement('div')
+
+          div.className = 'skill'
+
+          div.innerText = skill
+
+          skillsContainer.appendChild(div)
+
+        })
+
+        // Missing skills
+
+        const missingContainer =
+          document.getElementById(
+            'missingSkillsContainer'
+          )
+
+        missingContainer.innerHTML = ''
+
+        const missingSkills =
+          data.missing_skills || []
+
+        missingSkills.forEach(skill => {
+
+          const div =
+            document.createElement('div')
+
+          div.className = 'skill'
+
+          div.innerText = skill
+
+          missingContainer.appendChild(div)
+
+        })
+
+      }
+
+      catch (error) {
+
+        console.error(error)
+
+        showError(
+          'Backend connection failed'
+        )
+
+      }
+
+      finally {
+
+        uploadBtn.innerText =
+          'Analyze Resume'
+
+        uploadBtn.disabled = false
+
+      }
+
+    }
+
+    function showError(message) {
+
+      const errorBox =
+        document.getElementById('errorBox')
+
+      errorBox.style.display = 'block'
+
+      errorBox.innerText = message
+
+    }
+
+    function showSuccess(message) {
+
+      const successBox =
+        document.getElementById('successBox')
+
+      successBox.style.display = 'block'
+
+      successBox.innerText = message
+
+    }
+
+  </script>
+
+</body>
+
+</html>
